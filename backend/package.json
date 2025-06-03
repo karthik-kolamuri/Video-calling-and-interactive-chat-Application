@@ -1,0 +1,33 @@
+{
+  "name": "video_call_and_chat_application",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karthik-kolamuri/Video-calling-and-interactive-chat-Application.git"
+  },
+  "author": "Karthik Kolamuri",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/karthik-kolamuri/Video-calling-and-interactive-chat-Application/issues"
+  },
+  "homepage": "https://github.com/karthik-kolamuri/Video-calling-and-interactive-chat-Application#readme",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.15.1",
+    "stream-chat": "^9.3.0",
+    "video_call_and_chat_application": "file:"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
