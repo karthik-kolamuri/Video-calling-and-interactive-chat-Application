@@ -3,7 +3,12 @@ import mongoose from 'mongoose';
 // const bycrypt = require('bcryptjs');
 import bycrypt from 'bcryptjs';
 const userSchema = new mongoose.Schema({
-  username: {
+  fullname: {
+    type: String,
+    required: true,
+    
+  },
+  username:{
     type: String,
     required: true,
     unique: true,
