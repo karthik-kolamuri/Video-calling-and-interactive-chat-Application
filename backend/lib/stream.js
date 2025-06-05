@@ -1,5 +1,7 @@
 // const streamChat = require('stream-chat');
 import { StreamChat } from 'stream-chat';
+import dotEnv from 'dotenv'
+dotEnv.config()
 const apiKey = process.env.STREAM_API_KEY;
 const apiSecret = process.env.STREAM_SECRET_KEY;
 if (!apiKey || !apiSecret) {

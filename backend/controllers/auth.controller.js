@@ -4,6 +4,8 @@ import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 // const { createStreamUser } = require('../lib/stream');
 import { createStreamUser } from '../lib/stream.js';
+import bcrypt from 'bcryptjs';
+
 export const signupController=async (req, res) => {
     //signup controller logic
     const {email,password,fullname,username} = req.body;
@@ -37,7 +39,7 @@ if (existingUser) {
     try {
         await createStreamUser({
             id: newUser._id.toString(),
-            name: username,
+            name: fullname,
             image: randomAvatar
         });
     console.log(`Stream user created: ${newUser.username}`);
@@ -80,13 +82,14 @@ export const loginController=async (req, res) => {
     }
     
     const token = jwt.sign({id: existingUser._id}, process.env.JWT_SECRET, {expiresIn: '1h'});
+    req.session.jwt = token
     res.cookie('jwt',token,{
         maxAge: 3600000, // 1 hour
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // Set to true in production
         sameSite: 'strict' // Helps prevent CSRF attacks
     })
-    
+    console.log(`User logged in: ${token}`);
     res.status(200).json({message: 'Login successful', user: {email, fullname: existingUser.fullname}});            
 }
 export const logoutController=async (req, res) => {
@@ -94,4 +97,43 @@ export const logoutController=async (req, res) => {
     //logout controller logic
     res.clearCookie('jwt'); // Clear the cookie
     res.status(200).json({message: 'Logout successful'});
+}
+
+export const onboardController=async(req,res,next)=>{
+    const userId=req.user._id;
+    const {fullname,bio,nativeLanguage,learningLanguage}=req.body;
+    if(!fullname || !bio || !nativeLanguage || !learningLanguage){
+        return res.status(400).json({message: 'Please fill all the fields'});
+    }
+    const user=await User.findById(userId);
+    if(!user){
+        return res.status(400).json({message: 'User not found'});
+    }
+    user.fullname=fullname;
+    user.bio=bio;
+    user.nativeLanguage=nativeLanguage;
+    user.learningLanguage=learningLanguage;
+    user.isOnboarded=true;
+    await user.save();
+
+    //updating the data in the stream
+    try {
+        console.log('updating the data in the stream');
+        await createStreamUser({
+            id: user._id.toString(),
+            name: user.fullname,
+            bio: user.bio,
+            nativeLanguage: user.nativeLanguage,
+            learningLanguage: user.learningLanguage,
+            isOnboarded: true
+        });
+        console.log(`Stream user updated: ${user.username}`);
+
+        
+    } catch (error) {
+        console.log('Error updating Stream user:', error);
+        
+    }
+    res.status(200).json({message: 'User updated successfully'});
+    next();
 }
