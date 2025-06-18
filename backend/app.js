@@ -14,7 +14,8 @@ import cookieParser from 'cookie-parser';
 dotenv.config();
 
 // const authRoutes = require('./routes/auth.route');
-import authRoutes  from './routes/auth.route.js'
+import authRoutes from './routes/auth.route.js'
+import userRoutes from './routes/user.route.js'
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -36,6 +37,7 @@ app.use(
 );
 
 app.use('/api/auth',authRoutes)
+app.use('/api/user',userRoutes)
 
 app.use(cors());
 

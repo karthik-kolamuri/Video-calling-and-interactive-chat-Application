@@ -9,4 +9,9 @@ router.post('/login', loginController);
 router.post('/logout', logoutController);
 //onboarding route
 router.post('/onboard', authRoute, onboardController); 
+
+router.get("/me", authRoute, (req, res) => {
+    // res.send("Hello from auth route");
+    res.status(200).json({ user: req.user });
+});
 export default router;
