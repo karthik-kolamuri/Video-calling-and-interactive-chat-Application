@@ -214,3 +214,24 @@ export const getFriendRequest=async(req,res)=>{
         })
     }
 }
+export const getOutgoingFriendRequests=async(req,res)=>{
+    try{
+        //trying to get the friend request of the current user which is not accepted yet...
+        const outgoingReq=await FriendRequest.find({
+            sender:req.user._id.toString(),
+            status:"pending"
+        }).populate("receiver","username profilePic nativeLanguage learningLanguage");
+
+        res.status(200).json({
+            success:true,
+            message:"Here are your outgoing friend requests",
+            data:outgoingReq
+        })
+    }
+    catch(err){
+        res.status(500).json({
+            success:false,
+            message:"Server Error...."
+        })
+    }
+}

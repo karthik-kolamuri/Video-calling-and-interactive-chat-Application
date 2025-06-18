@@ -16,6 +16,7 @@ dotenv.config();
 // const authRoutes = require('./routes/auth.route');
 import authRoutes from './routes/auth.route.js'
 import userRoutes from './routes/user.route.js'
+// import chatRoutes from './routes/chat.route.js'
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -38,6 +39,7 @@ app.use(
 
 app.use('/api/auth',authRoutes)
 app.use('/api/user',userRoutes)
+app.use('/api/chat',chatRoutes)
 
 app.use(cors());
 
